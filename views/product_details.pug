@@ -8,7 +8,7 @@ block content
   p #[strong Description: ] #{product.description}
   p #[strong Number in stock: ] #{product.totalInStock}
 
-  each a in product.category
-   p #[strong Category:] #{product.category}
+  each categoryField in product.category
+   p #[strong Category:]
+   a(href=categoryField.url) #{categoryField.name}
   
-  p #{product}

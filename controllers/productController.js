@@ -12,7 +12,6 @@ Category.find({},'name')
     }
     res.render('index',{title: 'Inventory Management',category_list:category_list})
 })
-
 }
 //display list of products
 exports.productsList = function(req,res,next){
@@ -25,12 +24,10 @@ Product.find({})
 
 //display details of a specific product
 exports.productDetails = function(req,res,next){
-   
     async.parallel({
   product: function(callback){
- Product.findById(req.params.id)
- .populate('category')
-.exec(callback)
+ Product.findById(req.params.id).populate('category')
+ .exec(callback);
   }
 },
 function(err,data){

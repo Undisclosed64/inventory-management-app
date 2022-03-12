@@ -36,7 +36,7 @@ exports.category_update_post = function(req, res,next) {
 
 //display category list
 exports.category_list = function(req,res,next){
-res.send('category-list')
+    res.redirect('/store')
     }
     
 
@@ -61,7 +61,7 @@ res.send('category-list')
                 // Successful, so render
                 res.render('category_detail', { title: 'Category Details', category: results.category, category_products: results.category_products })
 
-                
-                console.log(results.category_products)
+
+                console.log('category products'+ results.category_products)
             
             })    };

@@ -1,4 +1,6 @@
-const category = require('../models/category');
+const async = require('async');
+const Category = require('../models/category');
+const Product = require('../models/product')
 
 // Display category create form on GET.
 exports.category_create_get = function(req, res,next) {
@@ -34,10 +36,32 @@ exports.category_update_post = function(req, res,next) {
 
 //display category list
 exports.category_list = function(req,res,next){
-    res.send('category list page')
+res.send('category-list')
     }
     
-    // Display detail page for a specific category
-    exports.category_detail = function(req, res,next) {
-        res.send('Category detail page: ' + req.params.id);
-    };
+
+// Display detail page for a specific category
+ exports.category_detail = function(req, res,next) {
+        async.parallel({
+            category: function(callback){
+                Category.findById(req.params.id)
+                .exec(callback);
+            },
+          category_products:function(callback){
+                Product.find({'category':req.params.id })
+                .exec(callback);
+            },
+            }, function(err, results) {
+                if (err) { return next(err); }
+                if (results.category==null) { // No results.
+                    var err = new Error('Category not found');
+                    err.status = 404;
+                    return next(err);
+                }
+                // Successful, so render
+                res.render('category_detail', { title: 'Category Details', category: results.category, category_products: results.category_products })
+
+                
+                console.log(results.category_products)
+            
+            })    };

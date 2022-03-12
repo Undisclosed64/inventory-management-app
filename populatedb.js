@@ -27,7 +27,7 @@ var products = []
 
 
 function categoryCreate(name,description,cb) {
-  var category = new Category({ name: name,description:description });
+  var category = new Category({ name: name,description:description});
        
   category.save(function (err) {
     if (err) {
@@ -40,17 +40,15 @@ function categoryCreate(name,description,cb) {
   });
 }
 
-
-
-function productCreate(name, description, price,noInStock,category,cb) {
+function productCreate(name, description, price,totalInStock,category,cb) {
   productdetail = { 
     name: name,
     description: description,
     price: price,
-    noInStock: noInStock
+    totalInStock: totalInStock,
   }
-if (category!= false) productdetail.category = category;
-    
+  if (category != false) productdetail.category = category
+ 
   var product = new Product(productdetail);    
   product.save(function (err) {
     if (err) {
@@ -68,19 +66,19 @@ if (category!= false) productdetail.category = category;
 function createProducts(cb) {
     async.parallel([
         function(callback) {
-          productCreate('Highlander White Casual Shirt', 'White casual shirt, has a spread collar, a full button placket, a patch pocket, long sleeves with roll-up button tabs, a curved hemline', '669', '60',categories[0],callback)
+          productCreate('Highlander White Casual Shirt', 'White casual shirt, has a spread collar, a full button placket, a patch pocket, long sleeves with roll-up button tabs, a curved hemline', '669', '60',[categories[0],],callback)
         },
         function(callback) {
-          productCreate('Highlander Olive Green Slim Fit Casual Shirt', 'Olive green casual shirt, has a mandarin collar, a full button placket, long sleeves, a patch pocket, and a curved hemline', '969', '100',categories[0],callback)
+          productCreate('Highlander Olive Green Slim Fit Casual Shirt', 'Olive green casual shirt, has a mandarin collar, a full button placket, long sleeves, a patch pocket, and a curved hemline', '969', '100',[categories[0],],callback)
         },
         function(callback) {
-          productCreate('Men Black & White Brand Logo Printed Gym T-shirt', 'Black and white t-shirt for men,Brand logo printed,Regular length,Round neck, regular sleeves', '1444', '80',categories[1],callback)
+          productCreate('Men Black & White Brand Logo Printed Gym T-shirt', 'Black and white t-shirt for men,Brand logo printed,Regular length,Round neck, regular sleeves', '1444', '80',[categories[1],],callback)
         },
         function(callback) {
-          productCreate('Ultralyte Men Black Running T-shirt', 'Swap your usual T-shirt with the HRX Running T-shirt and feel your run become easier and more comfortable. Designed with Rapid Dry technology, it wicks away sweat to keep you cool and dry from start to finish.', '337', '70',categories[1],callback)
+          productCreate('Ultralyte Men Black Running T-shirt', 'Swap your usual T-shirt with the HRX Running T-shirt and feel your run become easier and more comfortable. Designed with Rapid Dry technology, it wicks away sweat to keep you cool and dry from start to finish.', '337', '70',[categories[1],],callback)
         },
         function(callback) {
-          productCreate('Men Beige & Black Typography Printed Sustainable T-shirt', 'Beige and Black printed T-shirt, has a round neck, and short sleeves', '337', '90',categories[1],callback)
+          productCreate('Men Beige & Black Typography Printed Sustainable T-shirt', 'Beige and Black printed T-shirt, has a round neck, and short sleeves', '337', '90',[categories[1],],callback)
         },
         ],
         // optional callback

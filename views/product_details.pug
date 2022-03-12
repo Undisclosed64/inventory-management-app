@@ -1,0 +1,14 @@
+extends layout
+
+block content
+ 
+  h1 Product: #{product.name}
+  h3 Rs. #{product.price}
+  hr
+  p #[strong Description: ] #{product.description}
+  p #[strong Number in stock: ] #{product.totalInStock}
+
+  each a in product.category
+   p #[strong Category:] #{product.category}
+  
+  p #{product}

@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1= title
+ 
+  if error
+    p=error
+  else
+   h4 All Products:
+  each product in product_list
+   ul 
+     li 
+       a(href=product.url) #{product.name}
+       

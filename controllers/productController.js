@@ -1,16 +1,49 @@
 const Product = require('../models/product');
+const Category = require('../models/category');
 
+const async = require('async');
+
+//home page 
 exports.index = function(req,res,next){
-    res.send('Home page');
+Category.find({},'name')
+.exec(function(err,category_list){
+    if(err){
+        return next(err)
+    }
+    res.render('index',{title: 'Inventory Management',category_list:category_list})
+})
+
 }
 //display list of products
 exports.productsList = function(req,res,next){
-    res.send('Product list page');
+Product.find({})
+.exec(function(err,list_products){
+    if(err){return next(err)}
+    res.render('product_list',{title:'Products list',product_list:list_products})
+})
 }
 
 //display details of a specific product
 exports.productDetails = function(req,res,next){
-    res.send('Product details page');
+   
+    async.parallel({
+  product: function(callback){
+ Product.findById(req.params.id)
+ .populate('category')
+.exec(callback)
+  }
+},
+function(err,data){
+    if(err){
+        return next(err)
+    }
+    if (data.product==null) { // No results.
+        var err = new Error(' not found');
+        err.status = 404;
+        return next(err);
+    }
+    res.render('product_details',{product:data.product})
+    })
 }
 
 //handle product create on GET
@@ -35,7 +68,7 @@ exports.productUpdatePost = function(req,res,next){
 
 //handle product delete on GET
 exports.productDeleteGet = function(req,res,next){
-    res.send('Product get delete page');
+
 }
 
 //handle product delete on POST

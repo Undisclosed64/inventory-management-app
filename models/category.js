@@ -1,4 +1,3 @@
-//mongodb+srv://awesome-user:seattle@cluster0.m6wxj.mongodb.net/inventory?retryWrites=true&w=majority
 
 const mongoose = require('mongoose');
 

@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  h1 #{title}
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='name') Name:
+      input#name.form-control(type='text', placeholder='Van huesen black shirt' name='name' value=(product===undefined ? '' : product.name))
+    div.form-group
+      label(for='description') Description:
+      input#description.form-control(type='text', placeholder='This category has dresses for women'  name='description'  value=(product===undefined ? '' : product.description))
+    div.form-group
+      label(for='price') Price:
+      input#price.form-control(type='number',  name='price'  value=(product===undefined ? '' : product.price))
+    div.form-group
+      label(for='totalInStock') Number in stock:
+      input#totalInStock.form-control(type='number',  name='totalInStock'  value=(product===undefined ? '' : product.totalInStock))
+    div.form-group
+      label(for='category') Category:
+      select#category.form-control(type='select',placeholder='Select category' name='category' required='true')
+        each categoryItem in category
+          if product
+            option(value=categoryItem._id
+              selected=(
+                categoryItem._id.toString()==categoryItem._id
+                || categoryItem._id.toString()==categoryItem
+              ) ? 'selected' : false
+            ) #{categoryItem.name}
+          else
+           option(value=categoryItem._id) #{categoryItem.name}
+        
+
+    button.btn.btn-primary(type='submit') Submit

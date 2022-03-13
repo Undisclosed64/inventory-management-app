@@ -3,6 +3,7 @@ const Category = require('../models/category');
 
 const async = require('async');
 
+
 //home page 
 exports.index = function(req,res,next){
 Category.find({},'name')
@@ -45,32 +46,101 @@ function(err,data){
 
 //handle product create on GET
 exports.productCreateGet = function(req,res,next){
-    res.send('Product get create page');
+  async.parallel({
+      category:function(callback){
+          Category.find(callback);
+      },
+      },function(err,result){
+if(err){
+    return next(err)
+}
+res.render('product_create',{title:'Create new product',category:result.category});
+})
 }
 
 //handle product create on POST
 exports.productCreatePost = function(req,res,next){
-    res.send('Product post create page');
+    const product = new Product({
+        name:req.body.name,
+        description:req.body.description,
+        price:req.body.price,
+        totalInStock:req.body.totalInStock,
+        category:req.body.category
+    })
+
+    product.save(function(err){
+        if(err){
+            return next(err)
+        }
+        res.redirect('/store/products')
+    })
 }
 
 //handle product update on GET
 exports.productUpdateGet = function(req,res,next){
-    res.send('Product get update page');
+    async.parallel({
+        product:function(callback){
+            Product.findById(req.params.id).populate('category')
+            .exec(callback);
+            },
+        category:function(callback){
+            Category.find(callback);
+        },
+
+        },function(err,result){
+  if(err){
+      return next(err)
+  }
+  res.render('product_create',{title:'Update product',category:result.category,product:result.product});
+  console.log(result.category)
+  })
 }
 
 //handle product update on POST
 exports.productUpdatePost = function(req,res,next){
-    res.send('Product post update page');
+    const product = new Product(
+        {
+            name:req.body.name,
+            description:req.body.description,
+            price:req.body.price,
+            totalInStock:req.body.totalInStock,
+            category:req.body.category,
+            _id:req.params.id
+        }
+    )
+    Product.findByIdAndUpdate(req.params.id,product,function(err,updatedProduct){
+        if(err){
+            return next(err)
+        }
+        res.redirect(updatedProduct.url)
+    })
 }
 
 //handle product delete on GET
 exports.productDeleteGet = function(req,res,next){
-
+    async.parallel({
+        product: function(callback){
+       Product.findById(req.params.id)
+       .exec(callback);
+        }
+      },
+      function(err,data){
+          if(err){
+              return next(err)
+          }
+          res.render('product_delete',{product:data.product})
+          })
 }
 
 //handle product delete on POST
 exports.productDeletePost = function(req,res,next){
-    res.send('Product post delete page');
+    Product.findByIdAndDelete(req.params.id,function(err){
+        if(err){
+            return next(err)
+        } else {
+          res.redirect('/store/products')  
+        }
+    })
 }
 
 

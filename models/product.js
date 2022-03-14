@@ -7,7 +7,12 @@ name:{type:String, required: true},
 description: {type:String,required: true},
 price:{type:Number,required:true},
 totalInStock: {type:Number,required: true},
-category: [{type: Schema.Types.ObjectId,ref:'Category'}]
+category: [{type: Schema.Types.ObjectId,ref:'Category'}],
+img:
+{
+    data: Buffer,
+    contentType: String
+}
 })
 
 //virtual for product url
